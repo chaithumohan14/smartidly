@@ -8,5 +8,6 @@ import { DbModule } from 'src/db/db.module';
   providers: [IngredientsService, IngredientsDao],
   controllers: [IngredientsController],
   imports: [DbModule],
+  exports: [IngredientsService, IngredientsDao],
 })
 export class IngredientsModule {}

@@ -60,7 +60,9 @@ export class MenuItemsService {
     );
     menuItem.ingredients = ingredients;
 
-    return this.menuItemsDao.update(menuItem);
+    await this.menuItemsDao.update(menuItem);
+
+    return this.menuItemsDao.getById(menuItem.id, requestDetails.account.id);
   }
 
   async delete(requestDetails: IRequestDetails, id: number) {

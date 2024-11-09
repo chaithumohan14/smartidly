@@ -40,10 +40,15 @@ export class IngredientsService {
     updatedIngredient.description = ingredient.description;
     updatedIngredient.image = ingredient.image;
 
-    return this.ingredientsDao.update(updatedIngredient);
+    await this.ingredientsDao.update(updatedIngredient);
+
+    return this.ingredientsDao.getById(
+      ingredient.id,
+      requestDetails.account.id,
+    );
   }
 
   async delete(requestDetails: IRequestDetails, id: number) {
-    return this.ingredientsDao.delete(id, requestDetails.account.id);
+    return this.ingredientsDao.delete(id);
   }
 }

@@ -23,16 +23,16 @@ export class IngredientsEntity {
   @Column({ nullable: false })
   accountId: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, type: 'bigint' })
   createdAt: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'bigint' })
   updatedAt: number;
 
   @Column({ nullable: false, default: false })
   isDeleted: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'bigint' })
   deletedAt: number;
 
   @BeforeInsert()
@@ -42,7 +42,7 @@ export class IngredientsEntity {
 
   @BeforeUpdate()
   setUpdatedAt() {
-    if (this.isDeleted) {
+    if (!!this.isDeleted) {
       this.deletedAt = Date.now();
     } else {
       this.updatedAt = Date.now();
