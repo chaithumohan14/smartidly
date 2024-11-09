@@ -11,18 +11,30 @@ import { ApiKeyDao } from 'src/api-key/api-key.dao';
 import { ApiKeyTable } from 'src/api-key/api-key.entity';
 import * as crypto from 'crypto';
 import { IRequestDetails } from './request-details.decorator';
+import { AccountsDao } from 'src/accounts/accounts.dao';
+import { AccountStatus } from 'src/accounts/account-status.enum';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersDao: UsersDao,
     private readonly apiKeyDao: ApiKeyDao,
+    private readonly accountsDao: AccountsDao,
   ) {}
 
   async login(email: string, password: string) {
     const user = await this.usersDao.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException('User not found');
+    }
+
+    const account = await this.accountsDao.findById(user.accountId);
+    if (!account) {
+      throw new UnauthorizedException('Account not found');
+    }
+
+    if (account.status !== AccountStatus.ACTIVE) {
+      throw new UnauthorizedException('Account is not active');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);

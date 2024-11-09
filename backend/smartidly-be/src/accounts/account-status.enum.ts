@@ -3,4 +3,5 @@ export enum AccountStatus {
   PAID = 'paid',
   GRACE = 'grace',
   TRIAL = 'trial',
+  PENDING = 'pending',
 }
