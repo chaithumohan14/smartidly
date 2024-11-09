@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { AccountsDao } from './accounts.dao';
 import { IRequestDetails } from 'src/auth/request-details.decorator';
 import { CreateAccountRequest } from './request-models/create-account.request';
@@ -9,6 +9,9 @@ import { UsersDao } from 'src/users/users.dao';
 import { ApiKeyTable } from 'src/api-key/api-key.entity';
 import { ApiKeyDao } from 'src/api-key/api-key.dao';
 import { v4 as uuidv4 } from 'uuid';
+import { UserStatus } from 'src/users/user-status.enum';
+import { UserType } from 'src/users/user-type.enum';
+import { isEmail } from 'class-validator';
 
 @Injectable()
 export class AccountsService {
@@ -23,6 +26,18 @@ export class AccountsService {
   }
 
   async createAccount(body: CreateAccountRequest) {
+    if (
+      body.password !== body.confirmPassword ||
+      !body.confirmPassword ||
+      !body.password
+    ) {
+      throw new BadRequestException('Passwords do not match');
+    }
+
+    if (!isEmail(body.email)) {
+      throw new BadRequestException('Invalid email');
+    }
+
     const account = new Account();
     account.accountName = body.accountName;
     account.status = AccountStatus.TRIAL;
@@ -37,6 +52,8 @@ export class AccountsService {
     user.lastName = body.lastName;
     user.name = body.userName;
     user.accountId = accountId;
+    user.status = UserStatus.ACTIVE;
+    user.type = UserType.ADMIN;
 
     const createdUser = await this.usersDao.createUser(user);
     await this.accountsDao.updateAccount(accountId, {
