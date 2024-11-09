@@ -50,6 +50,9 @@ export class UsersTable {
   @Column({ type: 'enum', enum: UserType, nullable: true })
   type: UserType;
 
+  @Column({ type: 'bigint' })
+  accountId: number;
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);

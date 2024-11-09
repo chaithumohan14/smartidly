@@ -8,6 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './public.decorator';
 import { AuthService } from './auth.service';
 import { UsersDao } from 'src/users/users.dao';
+import { AccountsDao } from 'src/accounts/accounts.dao';
 
 @Injectable()
 export class SmartidlyAuthGuard extends AuthGuard('api-key') {
@@ -15,6 +16,7 @@ export class SmartidlyAuthGuard extends AuthGuard('api-key') {
     private readonly reflector: Reflector,
     private readonly authService: AuthService,
     private readonly usersDao: UsersDao,
+    private readonly accountsDao: AccountsDao,
   ) {
     super();
   }
@@ -40,8 +42,16 @@ export class SmartidlyAuthGuard extends AuthGuard('api-key') {
         throw new UnauthorizedException('User not found');
       }
 
-      request['user'] = user;
+      const accountId = user.accountId;
 
+      const account = await this.accountsDao.findById(accountId);
+
+      if (!account) {
+        throw new UnauthorizedException('Account not found');
+      }
+
+      request['user'] = user;
+      request['account'] = account;
       return true;
     } catch (error) {
       throw new UnauthorizedException(error);

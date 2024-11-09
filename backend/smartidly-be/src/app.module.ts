@@ -8,9 +8,17 @@ import { DbModule } from './db/db.module';
 import { ApiKeyModule } from './api-key/api-key.module';
 import { APP_GUARD } from '@nestjs/core';
 import { SmartidlyAuthGuard } from './auth/auth.guard';
+import { AccountsModule } from './accounts/accounts.module';
 
 @Module({
-  imports: [CommonModule, AuthModule, UsersModule, DbModule, ApiKeyModule],
+  imports: [
+    CommonModule,
+    AuthModule,
+    UsersModule,
+    DbModule,
+    ApiKeyModule,
+    AccountsModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,

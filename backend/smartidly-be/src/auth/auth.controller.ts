@@ -1,6 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UsersTable } from 'src/users/users.entity';
 import { Public } from './public.decorator';
 import { IRequestDetails, RequestDetails } from './request-details.decorator';
 
@@ -14,11 +13,11 @@ export class AuthController {
     return this.authService.login(body.email, body.password);
   }
 
-  @Public()
-  @Post('register')
-  async register(@Body() body: UsersTable) {
-    return this.authService.register(body);
-  }
+  // @Public()
+  // @Post('register')
+  // async register(@Body() body: UsersTable) {
+  //   return this.authService.register(body);
+  // }
 
   @Post('logout')
   async logout(@RequestDetails() requestDetails: IRequestDetails) {
