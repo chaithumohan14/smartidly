@@ -40,6 +40,12 @@ export class AccountsService {
       throw new BadRequestException('Invalid email');
     }
 
+    const emailId = body.email;
+    const existingUser = await this.usersDao.findByEmail(emailId);
+    if (existingUser) {
+      throw new BadRequestException('Email already in use');
+    }
+
     const account = new Account();
     account.accountName = body.accountName;
     account.status = AccountStatus.PENDING;
