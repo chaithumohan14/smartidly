@@ -10,9 +10,11 @@ import { APP_GUARD } from '@nestjs/core';
 import { SmartidlyAuthGuard } from './auth/auth.guard';
 import { AccountsModule } from './accounts/accounts.module';
 import { EmailServiceModule } from './email-service/email-service.module';
-import { OrdersModule } from './menus/orders/orders.module';
-import { OrdersModule } from './menu-items/orders/orders.module';
-import { OrdersModule } from './ingredients/orders/orders.module';
+import { PusherModule } from './pusher/pusher.module';
+import { OrdersModule } from './orders/orders.module';
+import { MenusModule } from './menus/menus.module';
+import { MenuItemsModule } from './menu-items/menu-items.module';
+import { IngredientsModule } from './ingredients/ingredients.module';
 
 @Module({
   imports: [
@@ -23,7 +25,11 @@ import { OrdersModule } from './ingredients/orders/orders.module';
     ApiKeyModule,
     AccountsModule,
     EmailServiceModule,
+    PusherModule,
     OrdersModule,
+    MenusModule,
+    MenuItemsModule,
+    IngredientsModule,
   ],
   controllers: [AppController],
   providers: [
