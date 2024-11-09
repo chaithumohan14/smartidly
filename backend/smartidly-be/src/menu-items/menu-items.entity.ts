@@ -38,7 +38,9 @@ export class MenuItemsEntity {
   @Column({ nullable: true })
   deletedAt: number;
 
-  @ManyToMany(() => IngredientsEntity)
+  @ManyToMany(() => IngredientsEntity, {
+    cascade: true,
+  })
   @JoinTable()
   ingredients: IngredientsEntity[];
 

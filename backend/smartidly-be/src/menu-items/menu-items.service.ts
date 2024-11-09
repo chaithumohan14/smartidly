@@ -2,14 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { MenuItemsDao } from './meunu-items.dao';
 import { IRequestDetails } from 'src/auth/request-details.decorator';
 import { MenuItemsEntity } from './menu-items.entity';
-import { IngredientsDao } from 'src/ingredients/ingredients.dao';
 
 @Injectable()
 export class MenuItemsService {
-  constructor(
-    private readonly menuItemsDao: MenuItemsDao,
-    private readonly ingredientsDao: IngredientsDao,
-  ) {}
+  constructor(private readonly menuItemsDao: MenuItemsDao) {}
 
   async getAll(requestDetails: IRequestDetails) {
     return this.menuItemsDao.getAll(requestDetails.account.id);
@@ -25,13 +21,7 @@ export class MenuItemsService {
     newMenuItem.createdAt = Date.now();
     newMenuItem.updatedAt = null;
     newMenuItem.deletedAt = null;
-    newMenuItem.ingredientIds = menuItem.ingredientIds;
-
-    const ingredients = await this.ingredientsDao.getByIds(
-      menuItem.ingredientIds,
-      requestDetails.account.id,
-    );
-    newMenuItem.ingredients = ingredients;
+    newMenuItem.ingredients = menuItem.ingredients;
 
     return this.menuItemsDao.create(newMenuItem);
   }
@@ -53,14 +43,9 @@ export class MenuItemsService {
     if (!existingMenuItem) {
       throw new NotFoundException('Menu item not found');
     }
+    updatedMenuItem.ingredients = menuItem.ingredients;
 
-    const ingredients = await this.ingredientsDao.getByIds(
-      menuItem.ingredientIds,
-      requestDetails.account.id,
-    );
-    menuItem.ingredients = ingredients;
-
-    await this.menuItemsDao.update(menuItem);
+    await this.menuItemsDao.update(updatedMenuItem);
 
     return this.menuItemsDao.getById(menuItem.id, requestDetails.account.id);
   }

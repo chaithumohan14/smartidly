@@ -13,6 +13,7 @@ import * as crypto from 'crypto';
 import { IRequestDetails } from './request-details.decorator';
 import { AccountsDao } from 'src/accounts/accounts.dao';
 import { AccountStatus } from 'src/accounts/account-status.enum';
+import { SessionService } from 'src/session/session.service';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +21,7 @@ export class AuthService {
     private readonly usersDao: UsersDao,
     private readonly apiKeyDao: ApiKeyDao,
     private readonly accountsDao: AccountsDao,
+    private readonly sessionService: SessionService,
   ) {}
 
   async login(email: string, password: string) {
@@ -88,5 +90,9 @@ export class AuthService {
     }
 
     return apiKey;
+  }
+
+  async validateSession(token: string) {
+    return this.sessionService.validateSession(token);
   }
 }

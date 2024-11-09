@@ -6,11 +6,12 @@ import { DbModule } from 'src/db/db.module';
 import { ApiKeyModule } from 'src/api-key/api-key.module';
 import { AuthStrategy } from './auth.strategy';
 import { AccountsModule } from 'src/accounts/accounts.module';
+import { SessionModule } from 'src/session/session.module';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService, AuthStrategy],
   exports: [AuthService],
-  imports: [UsersModule, DbModule, ApiKeyModule, AccountsModule],
+  imports: [UsersModule, DbModule, ApiKeyModule, AccountsModule, SessionModule],
 })
 export class AuthModule {}

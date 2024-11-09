@@ -15,6 +15,7 @@ import { OrdersModule } from './orders/orders.module';
 import { MenusModule } from './menus/menus.module';
 import { MenuItemsModule } from './menu-items/menu-items.module';
 import { IngredientsModule } from './ingredients/ingredients.module';
+import { SessionModule } from './session/session.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { IngredientsModule } from './ingredients/ingredients.module';
     MenusModule,
     MenuItemsModule,
     IngredientsModule,
+    SessionModule,
   ],
   controllers: [AppController],
   providers: [
