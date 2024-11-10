@@ -2,6 +2,11 @@ import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { OrdersEntity } from './orders.entity';
 import { OrdersService } from './orders.service';
 import { SessionDetails } from 'src/auth/session-details.decorator';
+import { SessionUser } from 'src/auth/session-user.decorator';
+import {
+  IRequestDetails,
+  RequestDetails,
+} from 'src/auth/request-details.decorator';
 
 @Controller('orders')
 export class OrdersController {
@@ -16,8 +21,16 @@ export class OrdersController {
   }
 
   @Get()
-  async getOrders(@SessionDetails() sessionDetails: SessionDetails) {
-    return this.ordersService.getOrders(sessionDetails);
+  @SessionUser()
+  async getOrdersForSessionUser(
+    @SessionDetails() sessionDetails: SessionDetails,
+  ) {
+    return this.ordersService.getOrdersForSessionUser(sessionDetails);
+  }
+
+  @Get('/all')
+  async getOrders(@RequestDetails() requestDetails: IRequestDetails) {
+    return this.ordersService.getOrders(requestDetails);
   }
 
   @Get(':id')

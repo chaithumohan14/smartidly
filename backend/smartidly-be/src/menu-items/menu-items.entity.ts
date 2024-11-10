@@ -14,25 +14,25 @@ export class MenuItemsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   description: string;
 
-  @Column()
+  @Column({})
   price: number;
 
-  @Column()
+  @Column({ type: 'bigint' })
   accountId: number;
 
   @Column({ default: false })
   isDeleted: boolean;
 
-  @Column()
+  @Column({ type: 'bigint' })
   createdAt: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'bigint' })
   updatedAt: number;
 
   @Column({ nullable: true })
@@ -43,8 +43,6 @@ export class MenuItemsEntity {
   })
   @JoinTable()
   ingredients: IngredientsEntity[];
-
-  ingredientIds: number[];
 
   @BeforeInsert()
   setCreatedAt() {

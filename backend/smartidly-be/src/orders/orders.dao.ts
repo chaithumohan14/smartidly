@@ -11,6 +11,13 @@ export class OrdersDao {
     return manager.save(OrdersEntity, order);
   }
 
+  async getOrdersBySessionId(accountId: number, sessionId: number) {
+    const manager = await this.dbService.getManager();
+    return manager.find(OrdersEntity, {
+      where: { accountId, sessionId, isDeleted: false },
+    });
+  }
+
   async getOrders(accountId: number) {
     const manager = await this.dbService.getManager();
     return manager.find(OrdersEntity, {

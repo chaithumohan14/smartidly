@@ -23,6 +23,16 @@ export class MenuItemsService {
     newMenuItem.deletedAt = null;
     newMenuItem.ingredients = menuItem.ingredients;
 
+    if (newMenuItem.ingredients?.length !== 0) {
+      for (const ingredient of newMenuItem.ingredients) {
+        ingredient.accountId = requestDetails.account.id;
+        ingredient.isDeleted = false;
+        ingredient.createdAt = Date.now();
+        ingredient.updatedAt = null;
+        ingredient.deletedAt = null;
+      }
+    }
+
     return this.menuItemsDao.create(newMenuItem);
   }
 
@@ -33,7 +43,6 @@ export class MenuItemsService {
     updatedMenuItem.description = menuItem.description;
     updatedMenuItem.price = menuItem.price;
     updatedMenuItem.accountId = requestDetails.account.id;
-    updatedMenuItem.ingredientIds = menuItem.ingredientIds;
 
     const existingMenuItem = await this.menuItemsDao.getById(
       menuItem.id,

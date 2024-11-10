@@ -4,6 +4,7 @@ import { OrdersEntity } from './orders.entity';
 import { SessionDetails } from 'src/auth/session-details.decorator';
 import { OrderStatus } from './order-status.enum';
 import { PusherService } from 'src/pusher/pusher.service';
+import { IRequestDetails } from 'src/auth/request-details.decorator';
 
 @Injectable()
 export class OrdersService {
@@ -26,6 +27,12 @@ export class OrdersService {
     newOrder.status = OrderStatus.PENDING;
     newOrder.deliveryAddress = order.deliveryAddress;
 
+    if (newOrder.orderToMenuItems) {
+      for (const orderToMenuItem of newOrder.orderToMenuItems) {
+        orderToMenuItem.accountId = account.id;
+      }
+    }
+
     const createdOrder = await this.ordersDao.create(newOrder);
 
     this.pusherService.trigger(`orders-${account.id}`, 'new-order', {
@@ -36,8 +43,16 @@ export class OrdersService {
     return createdOrder;
   }
 
-  async getOrders(sessionDetails: SessionDetails) {
+  async getOrdersForSessionUser(sessionDetails: SessionDetails) {
     const account = sessionDetails.account;
+    return this.ordersDao.getOrdersBySessionId(
+      account.id,
+      sessionDetails.session.id,
+    );
+  }
+
+  async getOrders(requestDetails: IRequestDetails) {
+    const account = requestDetails.account;
     return this.ordersDao.getOrders(account.id);
   }
 
